@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-const HOST = 'http://192.168.1.13:8000'
+const HOST = 'http://192.168.1.11:8000'
 export const endpoints = {
     'dskhoaluan': '/dskhoaluan/',
     'dshoidong': '/hoidongs/',
@@ -15,7 +15,18 @@ export const endpoints = {
     'diem_detail': (khoaluanId) => `/khoaluans/${khoaluanId}/diem_detail/`,
     'myhoidong': '/users/current_user/my_hoidong/',
     'khoaluan': '/khoaluans/',
-    'diem_create': (khoaluanId) => `/khoaluans/${khoaluanId}/create_diem/`
+    'diem_create': (khoaluanId) => `/khoaluans/${khoaluanId}/create_diem/`,
+    'khoaluan_detail' : (khoaluanId) => `/khoaluans/${khoaluanId}/`,
+    'patch_vaitro': (hoidongId) => `/hoidongdetail/${hoidongId}/thanhviens/patch/`,
+    'patch_block': (khoaluanId) => `khoaluans/${khoaluanId}/block/`,
+    'khoas': '/khoas/',
+    'tieuchis': '/tieuchis/',
+    'addkhoaluan': '/khoaluans/create-khoaluan/',
+    'updatekhoaluan': (khoaluanId) => `/khoaluans/${khoaluanId}/update-khoaluan/`,
+    'nottieuchis' : (khoaluanId) => `/khoaluans/${khoaluanId}/get_tieuchi_not/`,
+    'updatelink': (khoaluanId) => `/khoaluans/${khoaluanId}/update_link/`,
+    'email': '/emails/',
+    'suggests': '/suggests/'
 }
 
 export const authApi = (accessToken) => {

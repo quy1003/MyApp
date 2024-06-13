@@ -159,12 +159,14 @@ const Hoidong = ({ route, navigation }) => {
         <View style={patterns.centeredContainer}>
           <Text style={patterns.centerText}>DANH SÁCH HỘI ĐỒNG</Text>
         </View>
+        <View style={patterns.centeredContainer3}>
         <TextInput
           value={q}
           onChangeText={(txt) => setQ(txt)}
           style={patterns.searchInput}
           placeholder="Nhập tên hội đồng để tìm kiếm..."
         />
+        </View>
         <TouchableOpacity
           onPress={() => newHoidong()}
           style={{marginLeft: "55%", marginBottom: 20, padding: 20 }}

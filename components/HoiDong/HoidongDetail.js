@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import API, { authApi, endpoints } from "../../configs/API";
 import {
   ActivityIndicator,
@@ -6,6 +6,7 @@ import {
   Image,
   ImageBackground,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -13,15 +14,69 @@ import { patterns } from "../../styles/MyStyles";
 import { ScrollView } from "react-native";
 import HoidongStyles, { hoidongStyle } from "./HoidongStyles";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { HoidongContext, HoidongProvider } from "./HoidongContext";
 import ThanhvienDetail from "./Thanhvien";
 import { createContext } from "react";
 import { GlobalStateContext } from "./DltProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import UserStyles from "../User/UserStyles";
+import { RadioButton } from "react-native-paper";
+import { HoidongContext } from "./HoidongProvider";
 
 export const ThemeContext = createContext();
 
 const HoidongDetail = ({ route, navigation }) => {
+  const { glob,setGlob } = useContext(HoidongContext);
+  const [loading, setLoading] = useState(false)
+  const register = async () => {
+    console.info(newRole)
+    // 
+    setLoading(true)
+        
+    try{
+
+  
+  let accessToken = await AsyncStorage.getItem("access-token")
+  let res = await authApi(accessToken).patch(endpoints['patch_vaitro'](hoidongId), newRole, {
+      headers:{
+      'Content-Type': 'application/json'
+  },})
+  //Temp
+  
+  //
+  console.info(res.data)
+  Alert.alert("Thông báo","Đăng kí thành công!!!")
+  setIsDeleted(!isDeleted);
+  setGlobalState(true);
+  setGlob(res.data)
+  }
+  catch(ex)
+  {
+      console.error(ex)
+  }
+  finally{
+      setLoading(false)
+  }
+    // 
+  }
+  const changeRole = (field, value) => {
+
+    setNewRole(newRole=>{
+        return {...newRole, [field]:value}
+    })
+  }
+  const [newRole, setNewRole] = useState({
+    "vaitro": "",
+    "thanhvien_id": 0
+  })
+  const [change, setChange] = useState(false)
+  const changeVaitro = (thanhvien_id) => {
+    setChange(true)
+    
+    changeRole("thanhvien_id", thanhvien_id)
+  }
+  const hideChange = () => {
+    setChange(false)
+  }
   const { globalState, setGlobalState } = useContext(GlobalStateContext);
   const [isDeleted, setIsDeleted] = React.useState(false);
   const [tvId, setTvId] = React.useState(0);
@@ -171,6 +226,68 @@ const HoidongDetail = ({ route, navigation }) => {
                         Vai trò:{" "}
                         <Text style={{ color: "black" }}>{h.vaitro}</Text>
                       </Text>
+                      
+                      {/*  */}
+                      <View style={{flex: 1, alignItems: 'flex-end'}}>
+              <Text
+                    style={{ padding: 2, marginLeft: "67%", color: "black", fontStyle: 'italic', color:'orange', fontWeight:'bold' }}
+                  >
+                    Sửa vai trò
+                  </Text>
+              <TouchableOpacity
+                    style={{ width: "12%", marginLeft: "90%" }}
+                    onPress={() => changeVaitro(h.id)}
+                  >
+                    <Icon
+                      name="refresh"
+                      size={15}
+                      color="rgba(255,255,255,0.85)"
+                      style={{
+                        padding: 11,
+                        marginLeft: 5,
+                        marginBottom: 8,
+                        backgroundColor: "green",
+                      }}
+                    />
+                  </TouchableOpacity>
+                  </View>
+                      {/*  */}
+
+                      {/*  */}
+                      {change === true && newRole.thanhvien_id === h.id?<>
+                        <View>
+                      {/*  */}
+                      <View style={{ width: "100%", padding: 10,alignItems: 'center', justifyContent: "flex-start", backgroundColor: "white"}}>
+          <Text style={UserStyles.endTextSelected}>Chọn chức vụ</Text>
+          <RadioButton.Group  onValueChange={t=>{changeRole("vaitro", t)}} value={newRole.vaitro}>
+            <RadioButton.Item label="CHỦ TỊCH" value="CHU TICH" />
+            <RadioButton.Item label="THƯ KÝ" value="THU KY" />
+            <RadioButton.Item label="PHẢN BIỆN" value="PHAN BIEN" />
+            <RadioButton.Item label="THÀNH VIÊN KHÁC" value="THANH VIEN KHAC" />
+          </RadioButton.Group>    
+          </View> 
+                      {/*  */}
+        {loading === true ? <ActivityIndicator/> : <><TouchableOpacity onPress={register} style={{ marginTop: "1%", marginBottom: 20 }}>
+              <Text style={UserStyles.btnLogin}>Thay đổi</Text>
+            </TouchableOpacity></>}
+        <TouchableOpacity onPress={hideChange}>
+        <Text
+                style={[
+                  UserStyles.btnLogin,
+                  { backgroundColor: "rgba(255, 0, 0, 0.5)" },
+                ]}
+              >
+                Ẩn bớt
+              </Text>
+              </TouchableOpacity>
+                      </View>
+                      </>:<>
+                      
+                      </>}
+
+                      {/*  */}
+
+
                       <View style={{ display: "none" }}>
                         <ThanhvienDetail id={h.id} />
                       </View>

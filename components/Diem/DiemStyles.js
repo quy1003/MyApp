@@ -20,6 +20,12 @@ export default StyleSheet.create({
         color: "blue",
         
     },
+    fontBlueBold:{
+        fontWeight: "bold",
+        color: "red",
+        fontSize: 18,
+        
+    },
     fontBlack:{
         color: "black" 
     }

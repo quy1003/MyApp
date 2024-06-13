@@ -1,12 +1,13 @@
 import { ActivityIndicator, ImageBackground, Text, TouchableOpacity, View } from "react-native";
 import MyStyles, { patterns } from "../../styles/MyStyles";
-import { TextInput } from "react-native";
+import { TextInput, IconButton } from "react-native-paper";
 import UserStyles from "./UserStyles";
 import { useContext, useState } from "react";
 import MyContext from "./MyContext";
 import API, { authApi, endpoints } from "../../configs/API";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const Login = ({ navigation }) => {
   const [username, setUsername] = useState();
@@ -42,7 +43,15 @@ const Login = ({ navigation }) => {
     }
     
   };
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+  const renderPasswordIcon = (props) => (
+    <TextInput.Icon size={24} {...props} name={passwordVisible ? 'eye-off' : 'eye'} />
+  );
   return (
     <ImageBackground
       source={{
@@ -56,18 +65,22 @@ const Login = ({ navigation }) => {
         </Text>
         <Icon style={[UserStyles.iconLogin, {textAlign: 'left'}]} name="user" size={30} />
         <TextInput
+        label="Tài khoản"
           value={username}
           onChangeText={(t) => setUsername(t)}
-          style={UserStyles.input}
+          style={UserStyles.input3}
           placeholder="Nhập tài khoản..."
         />
         <Icon style={UserStyles.iconLogin} name="lock" size={30} />
         <TextInput
+        label='Mật khẩu'
           secureTextEntry={true}
           value={password}
           onChangeText={(t) => setPassword(t)}
-          style={UserStyles.input}
+          style={UserStyles.input3}
           placeholder="Nhập mật khẩu..."
+          
+          
         />
         {loading === true ? (
           <ActivityIndicator />

@@ -10,6 +10,22 @@ export default StyleSheet.create({
         borderBottomWidth: 1,
         position: 'relative'
     },
+    input2:{
+        width: '100%',
+        height: 50,
+        padding: 10,
+        margin: "1%",
+        backgroundColor: '#fff', 
+        borderBottomWidth: 1,
+        position: 'relative'
+    },input3:{
+        width: '90%',
+        height: 50,
+        margin: "1%",
+        backgroundColor: '#fff', 
+        borderBottomWidth: 1,
+        position: 'relative'
+    },
     btnLogin:{
         textAlign: 'center',
         backgroundColor: "#0055A8",
@@ -23,6 +39,17 @@ export default StyleSheet.create({
         padding: 10,
         borderRadius: 70
     },
+    iconLogin2:{
+        marginTop: 10,
+        color: 'black',
+        backgroundColor: 'yellow',
+        padding: 10,
+        borderRadius: 35,
+        width: 100,
+        textAlign: 'center',
+        fontWeight: 'bold',
+    }
+    ,
     avt:{
         borderRadius: 75,
         width: 150,

@@ -2,26 +2,41 @@ import { Alert, ImageBackground } from "react-native";
 import { Text } from "react-native"
 import { View } from "react-native"
 import UserStyles from "../User/UserStyles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TextInput } from "react-native";
 import { RadioButton } from "react-native-paper";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { authApi, endpoints } from "../../configs/API";
+import API, { authApi, endpoints } from "../../configs/API";
 import { TouchableOpacity } from "react-native";
 import { ActivityIndicator } from "react-native";
 import { patterns } from "../../styles/MyStyles";
 import { ScrollView } from "react-native";
 const CreateDiem = ({route,navigation}) => {
     const { khoaluanId } = route.params;
+    const [tieuchi, setTieuchi] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [issm, setIssm] = useState(false)
     const [diem, setDiem] = useState({
         "so_diem": 0,
         "nhanxet": "",
         "tieuchi": "HINH THUC",
         
       })
-
+    useEffect(()=>{
+      const loadTieuchi = async () => {
+        try{
+          let res = await API.get(endpoints['nottieuchis'](khoaluanId))
+          console.info(res.data)
+          setTieuchi(res.data)
+        }
+        catch(ex)
+        {
+          console.error(ex)
+        }
+      }
+      loadTieuchi()
+    },[khoaluanId, issm])
       const loadBack = () => {
         navigation.navigate("Khoaluan")
       }
@@ -64,6 +79,7 @@ const CreateDiem = ({route,navigation}) => {
                         
                         console.info(res.data)
                         Alert.alert("Thông báo","Nhập điểm thành công!!!")
+                        setIssm(!issm)
                         setDiem({
                             "nhanxet": "",
                             "tieuchi": "MO RONG",
@@ -85,7 +101,7 @@ const CreateDiem = ({route,navigation}) => {
          }
          catch(ex)
          {
-
+          console.error(ex)
          }
     
              
@@ -127,12 +143,15 @@ alignItems: 'flex-start', marginTop: 10}} >
         <View style={{ width: "85%", padding: 10,alignItems: 'center', justifyContent: "flex-start", backgroundColor: "white"}}>
           <Text style={UserStyles.endTextSelected}>Chọn tiêu chí</Text>
           <RadioButton.Group  onValueChange={t=>{change("tieuchi", t)}} value={diem.tieuchi}>
-            <RadioButton.Item label="HÌNH THỨC" value="HINH THUC" />
+            {/* <RadioButton.Item label="HÌNH THỨC" value="HINH THUC" />
             <RadioButton.Item label="PHẢN BIỆN" value="PHAN BIEN" />
             <RadioButton.Item label="THỰC HIỆN" value="THUC HIEN" />
             <RadioButton.Item label="ĐỘ KHÓ" value="DO KHO" />
             <RadioButton.Item label="MỞ RỘNG" value="MO RONG" />
-            <RadioButton.Item label="ỨNG DỤNG" value="UNG DUNG" />
+            <RadioButton.Item label="ỨNG DỤNG" value="UNG DUNG" /> */}
+            {tieuchi === null ? <></> : <>{tieuchi.map((t)=>(
+              <RadioButton.Item label={t.ten} value={t.ten} key={t.ten} />
+            ))}</>}
           </RadioButton.Group>    
           </View>
 

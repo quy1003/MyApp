@@ -5,23 +5,23 @@ import { ActivityIndicator } from "react-native";
 import { Text } from "react-native";
 import { patterns } from "../../styles/MyStyles";
 import DiemStyles from "./DiemStyles";
-import { useParams } from "react-router-dom";
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { KLStateContext } from "../KhoaLuan/KhoaLuanContext";
 const DiemDetail = ({route, navigation}) =>{
   const {khoaluanId} = route.params
-  const {KLState, setKLState} = useContext(KLStateContext)
-  const memoizedKLState = useMemo(() => KLState, [KLState]);
+  // const {KLState, setKLState} = useContext(KLStateContext)
+  // const memoizedKLState = useMemo(() => KLState, [KLState]);
   const [loading, setLoading] = useState(true)
     const [diem, setDiem] = useState(null)
     // const khoaluanId = 1
     useEffect(() => {
-      
+        
         const loadDiem = async () => {
-          setLoading(true)
           try {
-            
+            setLoading(true)
             let res = await API.get(endpoints['diem_detail'](khoaluanId))
+            
             setDiem(res.data);
           } catch (ex) {
             setDiem([]);
@@ -30,7 +30,7 @@ const DiemDetail = ({route, navigation}) =>{
         };
         loadDiem();
         setLoading(false)
-      }, [memoizedKLState]);
+      }, [khoaluanId]);
       
 
       const loadBack = () => {
